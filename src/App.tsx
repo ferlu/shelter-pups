@@ -17,11 +17,7 @@ function App() {
 	}, [navigate, isLoggedIn, location.pathname]);
 
 	return (
-		<div className='App'>
-			<header className='App-header'>
-				{isLoggedIn === "true" ? <Home /> : <Login />}
-			</header>
-		</div>
+		<div className='App'>{isLoggedIn === "true" ? <Home /> : <Login />}</div>
 	);
 }
 

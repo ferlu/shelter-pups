@@ -8,11 +8,9 @@ const Login = () => {
 	const navigate = useNavigate();
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
-	const [responseStatus, setResponseStatus] = useState(0);
-	const [errorMessage, setErrorMessage] = useState("");
+	const [errorMessage, setErrorMessage] = useState<any | null>(null);
 
 	const handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
-		setResponseStatus(0);
 		setErrorMessage("");
 		e.preventDefault();
 		const body = {
@@ -21,14 +19,15 @@ const Login = () => {
 		};
 		try {
 			const response = await login(body);
-			setResponseStatus(response.status);
 			if (response.status === 200) {
 				setErrorMessage("");
 				localStorage.setItem("isLoggedIn", "true");
 				return navigate("/home");
+			} else {
+				setErrorMessage(response.status);
 			}
-		} catch (error) {
-			setErrorMessage(errorMessage);
+		} catch (error: any) {
+			setErrorMessage(error.message);
 		}
 	};
 
@@ -81,9 +80,9 @@ const Login = () => {
 							</button>
 						</div>
 					</form>
-					{(![200, 0].includes(responseStatus) || errorMessage.length > 0) && (
+					{errorMessage && errorMessage.length > 0 && (
 						<div className='alert alert-error'>
-							<span>[{responseStatus}] - Please try again later</span>
+							<span>{errorMessage}</span>
 						</div>
 					)}
 				</div>
